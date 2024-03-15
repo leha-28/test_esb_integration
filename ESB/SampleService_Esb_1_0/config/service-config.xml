@@ -1,0 +1,12 @@
+<!--# Date # 	# Version # 	   # Author # 		 # Change Description #-->
+<!--29/04/2021   	1.0.0			Poorvi Bhat		  Initial version-->
+
+
+<service-config-envelope>
+<service-config-header/>
+   <service-config-data>
+      <SampleService_1_0>
+		<POST_Meth>POST</POST_Meth>
+		</SampleService_1_0>	
+   </service-config-data>
+</service-config-envelope>
