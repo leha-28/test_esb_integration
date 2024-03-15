@@ -1,0 +1,109 @@
+<!--# Date # 	 # Version # 	  # Author # 		 # Change Description #-->
+<!--10/11/2020 		1.0.0		Suvetha Sridhar   	Initial Version-->
+
+<ec:errorMapConfig xmlns:ec="http://soa.o2.co.uk/config/ErrorMapConfig">
+	<ec:service name="SendPortNotification">
+		<ec:commonMap>
+		<ec:errorMap>
+		<ec:sourceErrorCodes>
+		<ec:code>400</ec:code>
+		<ec:code>TBAPI-2008</ec:code>
+		<ec:code>TBAPI-2026</ec:code>
+		<ec:code>TBAPI-2030</ec:code>
+		<ec:code>OSB-382505</ec:code>
+		</ec:sourceErrorCodes>
+         <ec:destErrorCode>
+		 <ec:code>sendportnotification-37256-4501-V</ec:code>
+		 <ec:description>Invalid Request. Please check the input and resubmit.</ec:description>
+		 </ec:destErrorCode>
+			</ec:errorMap>
+			
+			
+			
+			
+			
+			<ec:errorMap>
+				<ec:sourceErrorCodes>
+					<ec:code>503</ec:code>
+					<ec:code>OSB-380002</ec:code>
+				</ec:sourceErrorCodes>
+				<ec:destErrorCode>
+					<ec:code>sendportnotification-37256-2501-F</ec:code>
+					<ec:description>One or more back end services are not available at the moment. Please try again later.</ec:description>
+				</ec:destErrorCode>
+			</ec:errorMap>
+			
+			
+			<ec:errorMap>
+				<ec:sourceErrorCodes>
+					<ec:code>OSB-382030</ec:code>
+					<ec:code>OSB-382510</ec:code>
+					<ec:code>OSB-382513</ec:code>
+					<ec:code>OSB-382515</ec:code>
+					<ec:code>OSB-382516</ec:code>
+					
+					<ec:code>OSB-382000</ec:code>
+					<ec:code>500</ec:code>
+					<ec:code>403</ec:code>
+					<ec:code>401</ec:code>
+					<ec:code>CIM-4000</ec:code>
+					<ec:code>TBAPI-1000</ec:code>
+					<ec:code>TBAPI-8000</ec:code>
+					<ec:code>TBAPI-9002</ec:code>
+				</ec:sourceErrorCodes>
+				<ec:destErrorCode>
+					<ec:code>sendportnotification-37256-3612-E</ec:code>
+					<ec:description>Internal service error has occurred.</ec:description>
+				</ec:destErrorCode>
+			</ec:errorMap>
+			
+			
+			<ec:errorMap>
+				<ec:sourceErrorCodes>
+					<ec:code>OSB-380000</ec:code>
+					<ec:code>TBAPI-8003</ec:code>
+				</ec:sourceErrorCodes>
+				<ec:destErrorCode>
+					<ec:code>sendportnotification-37256-2502-F</ec:code>
+					<ec:description>Backend Service call timed out. Please try again later.</ec:description>
+				</ec:destErrorCode>
+			</ec:errorMap>
+			
+			<ec:errorMap>
+				<ec:sourceErrorCodes>
+					<ec:code>TBAPI-1003</ec:code>
+					<ec:code>404</ec:code>
+				</ec:sourceErrorCodes>
+				<ec:destErrorCode>
+					<ec:code>sendportnotification-37256-3000-E</ec:code>
+					<ec:description>Notification record not found.</ec:description>
+				</ec:destErrorCode>
+			</ec:errorMap>
+			
+			
+			
+			
+
+
+			
+			
+
+
+
+
+
+			
+			
+			
+			
+			
+		</ec:commonMap>
+		
+		<ec:unknownError>
+<ec:destErrorCode>
+<ec:code>sendportnotification-37243-3612-E</ec:code>
+<ec:description>Internal service error has occurred.</ec:description>
+</ec:destErrorCode>
+</ec:unknownError>
+				</ec:service>
+</ec:errorMapConfig>
