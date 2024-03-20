@@ -1,28 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con1="http://www.bea.com/wli/sb/stages/logging/config">
     <con:coreEntry>
         <con:binding type="Native REST" xsi:type="con:NativeRestBindingType">
-            <con:wadl ref="SampleServiceNew_1_0/Resources/SampleServiceNew_1_0_Rest"/>
+            <con:wadl ref="SampleServiceNew_1_0/Resources/SampleServiceNew_1_0"/>
         </con:binding>
         <con:xqConfiguration>
             <con:snippetVersion>1.0</con:snippetVersion>
         </con:xqConfiguration>
     </con:coreEntry>
     <con:router>
-        <con:pipeline type="request" name="request-N3f57fefb.N131dd96f.0.18e4af5317e.N8000">
-            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffe" name="Request">
+        <con:pipeline type="request" name="request-N3f57fefb.N131dd96f.0.18e4af5317e.N8000" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+            <con:stage id="_StageId-N53e1bf36.19e335b7.0.18e56970211.N7f54" name="execstartTime" xmlns:con1="http://www.bea.com/wli/sb/stages/routing/config" xmlns:con3="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con4="http://www.bea.com/wli/sb/stages/logging/config" xmlns:con5="http://www.bea.com/wli/sb/stages/publish/config">
+                <con:comment>Capture execstartTime. This is done as part of TER logging(exec logs)</con:comment>
                 <con:context/>
                 <con:actions>
-                    <con1:assign varName="execStartTime">
-                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffa</con2:id>
-                        <con1:expr>
+                    <con3:assign varName="execStartTime" xmlns:con5="http://www.bea.com/wli/sb/stages/transform/config">
+                        <con2:id>_ActionId-N53e1bf36.19e335b7.0.18e56970211.N7f53</con2:id>
+                        <con3:expr>
                             <con2:xqueryText>((current-dateTime() - xs:dateTime("1970-01-01T00:00:00-00:00")) div xs:dayTimeDuration('PT0.001S'))</con2:xqueryText>
-                        </con1:expr>
-                    </con1:assign>
+                        </con3:expr>
+                    </con3:assign>
+                </con:actions>
+            </con:stage>
+            <con:stage id="_StageId-N53e1bf36.19e335b7.0.18e56970211.N7eed" name="header construction" xmlns:con4="http://www.bea.com/wli/sb/stages/logging/config" xmlns:con3="http://www.bea.com/wli/sb/stages/routing/config" xmlns:con5="http://www.bea.com/wli/sb/stages/publish/config">
+                <con:comment>Construct Request header</con:comment>
+                <con:context/>
+                <con:actions>
+                    <con3:replace varName="header" contents-only="false" xmlns:con1="http://www.bea.com/wli/sb/stages/routing/config" xmlns:con3="http://www.bea.com/wli/sb/stages/transform/config">
+                        <con2:id>_ActionId-N53e1bf36.19e335b7.0.18e56970211.N7eec</con2:id>
+                        <con3:location>
+                            <con2:xpathText>.</con2:xpathText>
+                        </con3:location>
+                        <con3:expr>
+                            <con:xqueryTransform xmlns:con="http://www.bea.com/wli/sb/stages/config">
+                                <con:resource ref="CommonResources/transformations/ConstructRequestSOAPHeaderFromUserHeader"/>
+                                <con:param name="inbound">
+                                    <con:path>$inbound</con:path>
+                                </con:param>
+                                <con:param name="header">
+                                    <con:path>if(data($isOrchestratedCall)="true") then
+if(exists($header/anyType)) then
+$header/anyType
+else
+$header
+else
+$header</con:path>
+                                </con:param>
+                                <con:param name="messageID">
+                                    <con:path>if(data($isOrchestratedCall)="true") then
+$u_msgid
+else
+$messageID</con:path>
+                                </con:param>
+                            </con:xqueryTransform>
+                        </con3:expr>
+                    </con3:replace>
+                </con:actions>
+            </con:stage>
+            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffe" name="capture inbound">
+                <con:context/>
+                <con:actions>
                     <con1:assign varName="mainInbound">
                         <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ff4</con2:id>
                         <con1:expr>
-                            <con2:xqueryText><![CDATA[<con:endpoint name="ProxyService$SampleServiceNew_1_0$proxyServices$SampleServiceNew_1_0" xmlns:con="http://www.bea.com/wli/sb/context">
+                            <con2:xqueryText><![CDATA[<con:endpoint name="ProxyService$SampleServiceNew_1_0$proxyservices$SampleServiceNew_1_0" xmlns:con="http://www.bea.com/wli/sb/context">
   <con:service>
     <con:operation>sample</con:operation>
   </con:service>
@@ -51,6 +92,11 @@
 </con:endpoint>]]></con2:xqueryText>
                         </con1:expr>
                     </con1:assign>
+                </con:actions>
+            </con:stage>
+            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ff3" name="Retrieve_Config_Data">
+                <con:context/>
+                <con:actions>
                     <con1:javaCallout varName="configData">
                         <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ff7</con2:id>
                         <con1:archive ref="Utility/configdatamanagement/configdatamanagement"/>
@@ -61,21 +107,21 @@
                         </con1:expr>
                         <con1:return-param-as-ref>false</con1:return-param-as-ref>
                     </con1:javaCallout>
-                </con:actions>
-            </con:stage>
-            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ff3" name="Capture Request">
-                <con:context/>
-                <con:actions>
                     <con1:assign varName="configXML">
                         <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fee</con2:id>
                         <con1:expr>
                             <con2:xqueryText>fn-bea:inlinedXML($configData)/service-config-data/SampleServiceNew_1_0</con2:xqueryText>
                         </con1:expr>
                     </con1:assign>
+                </con:actions>
+            </con:stage>
+            <con:stage id="_StageId-N53e1bf36.19e335b7.0.18e56970211.N7e81" name="Capture Request">
+                <con:context/>
+                <con:actions>
                     <con1:assign varName="incomingMsisdn">
                         <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7feb</con2:id>
                         <con1:expr>
-                            <con2:xqueryText>data($inbound/ctx:transport/ctx:request/tp:user-metadata[@name='msisdn']/@value)</con2:xqueryText>
+                            <con:xqueryText xmlns:con="http://www.bea.com/wli/sb/stages/config">data($inbound/ctx:transport/ctx:request/http:query-parameters/http:parameter[@name='msisdn']/@value)</con:xqueryText>
                         </con1:expr>
                     </con1:assign>
                 </con:actions>
@@ -110,30 +156,35 @@
                 </con:actions>
             </con:stage>
         </con:pipeline>
-        <con:pipeline type="response" name="response-N3f57fefb.N131dd96f.0.18e4af5317e.N7fff">
-            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffd" name="Stage1">
+        <con:pipeline type="response" name="response-N3f57fefb.N131dd96f.0.18e4af5317e.N7fff" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+            <con:stage id="_StageId-N53e1bf36.19e335b7.0.18e56970211.N7e84" name="Total_Backend_exe" xmlns:con3="http://www.bea.com/wli/sb/stages/publish/config">
                 <con:context/>
                 <con:actions>
-                    <con1:assign varName="execEndTime">
-                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fd9</con2:id>
+                    <con1:assign varName="tExecBackend">
+                        <con2:id>_ActionId-N53e1bf36.19e335b7.0.18e56970211.N7e83</con2:id>
                         <con1:expr>
                             <con2:xqueryText>xs:integer((current-dateTime() - xs:dateTime("1970-01-01T00:00:00-00:00")) div xs:dayTimeDuration('PT0.001S')) - xs:integer($initExecBackend)</con2:xqueryText>
                         </con1:expr>
                     </con1:assign>
+                </con:actions>
+            </con:stage>
+            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffd" name="Response">
+                <con:context/>
+                <con:actions>
                     <con1:replace varName="body" contents-only="true">
                         <con2:id>_ActionId-N53e1bf37.N5119ffdd.0.18e4b640249.N7ffe</con2:id>
                         <con1:location>
                             <con2:xpathText>.</con2:xpathText>
                         </con1:location>
                         <con1:expr>
-                            <con2:xqueryText>$Response</con2:xqueryText>
+                            <con2:xqueryText>data($Response)</con2:xqueryText>
                         </con1:expr>
                     </con1:replace>
                 </con:actions>
             </con:stage>
         </con:pipeline>
         <con:flow>
-            <con:pipeline-node name="request and response">
+            <con:pipeline-node name="request and response" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
                 <con:request>request-N3f57fefb.N131dd96f.0.18e4af5317e.N8000</con:request>
                 <con:response>response-N3f57fefb.N131dd96f.0.18e4af5317e.N7fff</con:response>
             </con:pipeline-node>

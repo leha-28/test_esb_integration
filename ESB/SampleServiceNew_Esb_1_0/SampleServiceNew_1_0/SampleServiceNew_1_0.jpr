@@ -124,8 +124,8 @@
       <url n="pomfileURL" path="pom.xml"/>
    </hash>
    <hash n="oracle.jdeveloper.model.J2eeSettings">
-      <value n="j2eeWebAppName" v="ServiceBusApplication-SampleServiceNew_1_0-webapp"/>
-      <value n="j2eeWebContextRoot" v="ServiceBusApplication-SampleServiceNew_1_0-context-root"/>
+      <value n="j2eeWebAppName" v="sample-SampleServiceNew_1_0-webapp"/>
+      <value n="j2eeWebContextRoot" v="sample-SampleServiceNew_1_0-context-root"/>
       <hash n="webContentSet">
          <list n="pattern-filters"/>
          <list n="url-path">
