@@ -1,0 +1,10 @@
+<service-config-envelope>
+	<service-config-header/>
+	<service-config-data>
+		<SampleServiceNew_1_0>
+			<SuccessResponse>MSISDN is proper</SuccessResponse>
+			<FailureResponse>MSISDN is not proper</FailureResponse>
+                        <MSISDN>447489103071</MSISDN>
+		</SampleServiceNew_1_0>
+	</service-config-data>
+</service-config-envelope>
