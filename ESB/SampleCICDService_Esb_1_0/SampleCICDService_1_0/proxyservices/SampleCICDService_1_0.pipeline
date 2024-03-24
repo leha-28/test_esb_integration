@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:coreEntry>
+        <con:binding type="Native REST" xsi:type="con:NativeRestBindingType"/>
+        <con:xqConfiguration>
+            <con:snippetVersion>1.0</con:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:router>
+        <con:pipeline type="request" name="request-N3f57fefb.N131dd96f.0.18e4af5317e.N8000" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffe" name="Request">
+                <con:context/>
+                <con:actions>
+                    <con1:assign varName="execStartTime">
+                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffa</con2:id>
+                        <con1:expr>
+                            <con2:xqueryText>((current-dateTime() - xs:dateTime("1970-01-01T00:00:00-00:00")) div xs:dayTimeDuration('PT0.001S'))</con2:xqueryText>
+                        </con1:expr>
+                    </con1:assign>
+                    <con1:assign varName="mainInbound">
+                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ff4</con2:id>
+                        <con1:expr>
+                            <con2:xqueryText><![CDATA[<con:endpoint name="ProxyService$SampleCICDService_1_0$proxyservices$SampleCICDService_1_0" xmlns:con="http://www.bea.com/wli/sb/context">
+  <con:service>
+    <con:operation>sample</con:operation>
+  </con:service>
+  <con:transport>
+    <con:uri>/sample/cicd</con:uri>
+    <con:mode>request-response</con:mode>
+    <con:qualityOfService>best-effort</con:qualityOfService>
+    <con:request xsi:type="http:HttpRequestMetaData" xmlns:http="http://www.bea.com/wli/sb/transports/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <tran:headers xsi:type="http:HttpRequestHeaders" xmlns:tran="http://www.bea.com/wli/sb/transports">
+        <http:Content-Type>text/xml; charset=utf-8</http:Content-Type>
+        <http:SOAPAction>""</http:SOAPAction>
+      </tran:headers>
+      <tran:encoding xmlns:tran="http://www.bea.com/wli/sb/transports">utf-8</tran:encoding>
+      <http:query-parameters/>
+    </con:request>
+    <con:response xsi:type="http:HttpResponseMetaData" xmlns:http="http://www.bea.com/wli/sb/transports/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <tran:headers xsi:type="http:HttpResponseHeaders" xmlns:tran="http://www.bea.com/wli/sb/transports"/>
+      <tran:response-code xmlns:tran="http://www.bea.com/wli/sb/transports">0</tran:response-code>
+    </con:response>
+  </con:transport>
+  <con:security>
+    <con:transportClient>
+      <con:username>&lt;anonymous></con:username>
+    </con:transportClient>
+  </con:security>
+</con:endpoint>]]></con2:xqueryText>
+                        </con1:expr>
+                    </con1:assign>
+                    <con1:javaCallout varName="configData">
+                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ff7</con2:id>
+                        <con1:archive ref="Utility/configdatamanagement/configdatamanagement"/>
+                        <con1:className>uk.co.o2.soa.sf.xmldata.parsing.impl.ConfigFileManager</con1:className>
+                        <con1:method>public static java.lang.String retreiveServiceData(org.apache.xmlbeans.XmlObject)</con1:method>
+                        <con1:expr>
+                            <con2:xqueryText>$mainInbound</con2:xqueryText>
+                        </con1:expr>
+                        <con1:return-param-as-ref>false</con1:return-param-as-ref>
+                    </con1:javaCallout>
+                </con:actions>
+            </con:stage>
+            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ff3" name="Capture Request">
+                <con:context/>
+                <con:actions>
+                    <con1:assign varName="configXML">
+                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fee</con2:id>
+                        <con1:expr>
+                            <con2:xqueryText>fn-bea:inlinedXML($configData)/service-config-data/SampleCICDService_1_0</con2:xqueryText>
+                        </con1:expr>
+                    </con1:assign>
+                    <con1:assign varName="incomingMsisdn">
+                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7feb</con2:id>
+                        <con2:disabled>true</con2:disabled>
+                        <con1:expr>
+                            <con2:xqueryText>data($inbound/ctx:transport/ctx:request/tp:user-metadata[@name='msisdn']/@value)</con2:xqueryText>
+                        </con1:expr>
+                    </con1:assign>
+                </con:actions>
+            </con:stage>
+            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fe7" name="condition">
+                <con:context/>
+                <con:actions>
+                    <con1:ifThenElse>
+                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fe0</con2:id>
+                        <con1:case id="_BranchId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fdf">
+                            <con1:condition>
+                                <con2:xqueryText>fn:starts-with(data($incomingMsisdn),"44")</con2:xqueryText>
+                            </con1:condition>
+                            <con1:actions>
+                                <con1:assign varName="Response">
+                                    <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fdc</con2:id>
+                                    <con1:expr>
+                                        <con2:xqueryText>$configXML/SuccessResponse</con2:xqueryText>
+                                    </con1:expr>
+                                </con1:assign>
+                            </con1:actions>
+                        </con1:case>
+                        <con1:default>
+                            <con1:assign varName="Response">
+                                <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fd6</con2:id>
+                                <con1:expr>
+                                    <con2:xqueryText>$configXML/SuccessResponse</con2:xqueryText>
+                                </con1:expr>
+                            </con1:assign>
+                        </con1:default>
+                    </con1:ifThenElse>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-N3f57fefb.N131dd96f.0.18e4af5317e.N7fff" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+            <con:stage id="_StageId-N3f57fefb.N131dd96f.0.18e4af5317e.N7ffd" name="Stage1">
+                <con:context/>
+                <con:actions>
+                    <con1:assign varName="execEndTime">
+                        <con2:id>_ActionId-N3f57fefb.N131dd96f.0.18e4af5317e.N7fd9</con2:id>
+                        <con1:expr>
+                            <con2:xqueryText>xs:integer((current-dateTime() - xs:dateTime("1970-01-01T00:00:00-00:00")) div xs:dayTimeDuration('PT0.001S')) - xs:integer($initExecBackend)</con2:xqueryText>
+                        </con1:expr>
+                    </con1:assign>
+                    <con1:replace varName="body" contents-only="true">
+                        <con2:id>_ActionId-N53e1bf37.N5119ffdd.0.18e4b640249.N7ffe</con2:id>
+                        <con1:location>
+                            <con2:xpathText>.</con2:xpathText>
+                        </con1:location>
+                        <con1:expr>
+                            <con2:xqueryText>$Response</con2:xqueryText>
+                        </con1:expr>
+                    </con1:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:flow>
+            <con:pipeline-node name="request and response" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config" xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+                <con:request>request-N3f57fefb.N131dd96f.0.18e4af5317e.N8000</con:request>
+                <con:response>response-N3f57fefb.N131dd96f.0.18e4af5317e.N7fff</con:response>
+            </con:pipeline-node>
+        </con:flow>
+    </con:router>
+</con:pipelineEntry>

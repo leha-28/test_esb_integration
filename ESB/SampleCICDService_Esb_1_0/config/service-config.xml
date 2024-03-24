@@ -1,0 +1,13 @@
+
+<!--  # Date # 	 # Version # 	  # Author # 		 # Change Description #  -->
+<!--  17/03/2024 	1.0.0		   Leha J/Devakesh V	    	Initial Version  -->
+<service-config-envelope>
+<service-config-header/>
+<service-config-data>
+<SampleCICDService_1_0>
+<SuccessResponse>MSISDN is proper</SuccessResponse>
+<FailureResponse>MSISDN is not proper</FailureResponse>
+<msisdn>44909012342</msisdn>
+</SampleCICDService_1_0>
+</service-config-data>
+</service-config-envelope>
